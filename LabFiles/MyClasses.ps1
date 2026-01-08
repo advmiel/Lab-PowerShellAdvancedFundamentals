@@ -27,7 +27,7 @@ class Participant {
 function Get-UserData {
     [CmdletBinding()]
     #$MyUserListFile = "$PSScriptRoot\MyLabFile.csv"
-    $MyUserListFile = ".\MyLabFile123.csv"
+    $MyUserListFile = ".\MyLabFile.csv"
     try {
         $csv = import-csv -path $MyUserListFile -Delimiter ","
         return $csv
@@ -39,7 +39,6 @@ function Get-UserData {
         #Write-Output "Error importing csv file"
         $_
     }
-    
 }
 
 function Get-CourseUser {
