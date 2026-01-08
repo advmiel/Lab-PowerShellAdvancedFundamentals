@@ -27,19 +27,9 @@ class Participant {
 function Get-UserData {
     [CmdletBinding()]
     #$MyUserListFile = "$PSScriptRoot\MyLabFile.csv"
-    $MyUserListFile = ".\MyLabFile123.csv"
-    try {
-        $csv = import-csv -path $MyUserListFile -Delimiter ","
-        return $csv
-    }
-    catch [System.IO.FileNotFoundException]{
-        Write-Output "Database file not found $MyUserListFile"
-    }
-    catch {
-        #Write-Output "Error importing csv file"
-        $_
-    }
-    
+    $MyUserListFile = ".\MyLabFile.csv"
+    $csv = import-csv -path $MyUserListFile -Delimiter ","
+    return $csv
 }
 
 function Get-CourseUser {
@@ -57,6 +47,8 @@ function Get-CourseUser {
 
 function Add-CourseUser {
     param (
+        [ValidatePattern({"^[A-Z][a-z]*|\-|\s|[A-Z]|[a-z]"}, ErrorMessage = 'Name is in an incorrect format')]
+        #[ValidatePattern({'^[A-Z][\w\-\s]*$'}, ErrorMessage = 'Name is in an incorrect format')]
         [Parameter(Mandatory=$true)]
         [string]$Name,
         [Parameter(Mandatory=$false)]
@@ -112,17 +104,4 @@ function Remove-CourseUser {
         Default {}
     }
     #Set-Content -Value $MyUserList -Path $DatabaseFile -WhatIf
-}
-
-function Confirm-CourseID {
-    Param()
-
-    $AllUsers = Get-UserData
-
-    foreach ($User in $AllUsers) {
-        if ($User.Id -notmatch '^\d+$') {
-            #Write-Output "User $($User.Name) has mismatching id: $($User.Id)"
-            Write-Error "User $($User.Name) has mismatching id: $($User.Id)"
-        }
-    }
 }
